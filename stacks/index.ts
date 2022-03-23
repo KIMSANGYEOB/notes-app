@@ -1,13 +1,16 @@
-import MyStack from "./MyStack";
+// stacks/index.ts
 import * as sst from "@serverless-stack/resources";
+import StorageStack from "./StorageStack";
+import ApiStack from "./ApiStack";
 
 export default function main(app: sst.App): void {
-  // Set default runtime for all functions
-  app.setDefaultFunctionProps({
-    runtime: "nodejs14.x"
+  // 두번째 인자에 본인 이름이나 이니셜로 생성해주자
+  // ex) storage-sykim
+  const storageStack = new StorageStack(app, "storage-sykim");
+
+  // 두번째 인자에 본인 이름이나 이니셜로 생성해주자
+  // ex) api-sykim
+  new ApiStack(app, "api-sykim", {
+    table: storageStack.table,
   });
-
-  new MyStack(app, "my-stack");
-
-  // Add more stacks
 }
