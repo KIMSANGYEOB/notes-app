@@ -1,5 +1,5 @@
 // stacks/ApiStack.ts
-import * as sst from "@serverless-stack/resources";
+import * as sst from '@serverless-stack/resources';
 
 export default class ApiStack extends sst.Stack {
   // 다른 스택에서 접근할 수 있도록 선언
@@ -11,14 +11,18 @@ export default class ApiStack extends sst.Stack {
     const { table } = props;
 
     // API 생성 (두번째 인자에 본인 이니셜을 포함해 ID를 넣어주자)
-    this.api = new sst.Api(this, "api-sykim", {
+    this.api = new sst.Api(this, 'api-sykim', {
       defaultFunctionProps: {
         environment: {
           TABLE_NAME: table.tableName,
         },
       },
       routes: {
-        "POST /notes": "src/create.main",
+        'POST /notes': 'src/create.main', // 메모 생성 API
+        'GET /notes/{id}': 'src/get.main', // 메모 조회 API
+        'GET /notes': 'src/list.main', // 메모 목록 조회 API
+        'PUT /notes/{id}': 'src/update.main', // 메모 수정 API
+        'DELETE /notes/{id}': 'src/delete.main', // 메모 삭제 API
       },
     });
 
