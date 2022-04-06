@@ -2,7 +2,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import * as sst from "@serverless-stack/resources";
 import ApiStack from "../stacks/ApiStack";
 
-//TODO. 테스트 코드 구성필요 TEST
+//TODO. 테스트 코드 구성필요 TEST 추가예정
 test("Test Stack", () => {
   const app = new sst.App();
   // WHEN
