@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start:stage": "sst start --stage stage",
     "test": "sst test",
     "start": "sst start",
     "build": "sst build",
@@ -19,6 +20,7 @@
     "@serverless-stack/resources": "0.69.2",
     "@tsconfig/node14": "^1.0.1",
     "@types/aws-lambda": "^8.10.70",
+    "@types/mocha": "^9.1.0",
     "@types/node": "<15.0.0",
     "@types/uuid": "^8.3.4",
     "aws-cdk-lib": "2.15.0",
