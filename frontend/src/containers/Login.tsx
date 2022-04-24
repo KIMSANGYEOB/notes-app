@@ -11,15 +11,15 @@ export default function Login() {
     return email.length > 0 && password.length > 0;
   }
 
-  function handleSubmit(event: AnyLengthString) {
+  function handleSubmit(event: any) {
     event.preventDefault();
   }
 
   return (
     <div className="Login">
       <Form onSubmit={handleSubmit}>
-        <Form.Group size="lg" controlId="email">
-          <Form.Label>Email</Form.Label>
+        <Form.Group controlId="email">
+          <Form.Label>이메일</Form.Label>
           <Form.Control
             autoFocus
             type="email"
@@ -27,8 +27,8 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
-        <Form.Group size="lg" controlId="password">
-          <Form.Label>Password</Form.Label>
+        <Form.Group controlId="password">
+          <Form.Label>비밀번호</Form.Label>
           <Form.Control
             type="password"
             value={password}
