@@ -2,7 +2,7 @@ import * as sst from '@serverless-stack/resources';
 import StorageStack from './StorageStack';
 import ApiStack from './ApiStack';
 import AuthStack from './AuthStack';
-import FrontendStack from "./FrontendStack";
+import FrontendStack from './FrontendStack';
 
 export default function main(app: sst.App): void {
   // 두번째 인자에 본인 이름이나 이니셜로 생성해주자
@@ -22,7 +22,7 @@ export default function main(app: sst.App): void {
     bucket: storageStack.bucket,
   });
 
-  new FrontendStack(app, "frontend", {
+  new FrontendStack(app, 'frontend-sykim', {
     api: apiStack.api,
     auth: authStack.auth,
     bucket: storageStack.bucket,
