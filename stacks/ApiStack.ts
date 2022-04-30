@@ -1,9 +1,7 @@
-// stacks/ApiStack.ts
 import * as sst from '@serverless-stack/resources';
 import { ApiAuthorizationType } from '@serverless-stack/resources';
 
 export default class ApiStack extends sst.Stack {
-  // 다른 스택에서 접근할 수 있도록 선언
   api;
 
   constructor(scope: sst.App, id: string, props?: any) {

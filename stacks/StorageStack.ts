@@ -1,9 +1,7 @@
-// StorageStack.ts
 import * as sst from '@serverless-stack/resources';
 import { HttpMethods } from 'aws-cdk-lib/aws-s3';
 
 export default class StorageStack extends sst.Stack {
-  // 외부에서 접근할 수 있도록 선언
   table;
   bucket;
 
