@@ -1,0 +1,10 @@
+export function onError(error: unknown) {
+    let message = (error as Error).toString();
+  
+    // Auth errors
+    if (!(error instanceof Error) && (error as Error).message) {
+      message = (error as Error).message;
+    }
+  
+    alert(message);
+  }
