@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import "./App.css";
 import Routes from "./Routes";
 import { AppContext } from "./lib/contextLib";
+import { onError } from "./lib/errorLib";
 import Nav from "react-bootstrap/Nav";
 import { LinkContainer } from "react-router-bootstrap";
 import { Auth } from "aws-amplify";
 
 function App() {
+  const history = useHistory();
   const [isAuthenticated, userHasAuthenticated] = useState<boolean>(false);
-  const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
 
   useEffect(() => {
     onLoad();
@@ -22,15 +25,19 @@ function App() {
     }
     catch(e) {
       if (e !== 'No current user') {
-        alert(e);
+        onError(e);
       }
     }
   
     setIsAuthenticating(false);
   }
 
-  function handleLogout() {
+  async function handleLogout() {
+    await Auth.signOut();
+  
     userHasAuthenticated(false);
+
+    history.push("/login");
   }
 
   return (

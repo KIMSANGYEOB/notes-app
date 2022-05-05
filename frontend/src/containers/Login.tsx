@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import LoaderButton from "../components/LoaderButton"; // 새로 추가
 import { Auth } from "aws-amplify";
 import { Authentication, useAppContext } from "../lib/contextLib";
+import { onError } from "../lib/errorLib";
 import "./Login.css";
 
 export default function Login() {
+  const history = useHistory();
   const { userHasAuthenticated } = useAppContext() as Authentication;
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,11 +21,15 @@ export default function Login() {
   async function handleSubmit(event: any) {
     event.preventDefault();
   
+    setIsLoading(true);
+
     try {
       await Auth.signIn(email, password);
       userHasAuthenticated(true);
+      history.push("/");
     } catch (e: unknown) {
-      alert((e as Error).message);
+      onError(e);
+      setIsLoading(false);
     }
   }
 
@@ -45,9 +53,16 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+        <LoaderButton
+          block
+          size="lg"
+          type="submit"
+          isLoading={isLoading}
+          disabled={!validateForm()}
+          className={""}
+          >
           로그인
-        </Button>
+        </LoaderButton>
       </Form>
     </div>
   );
