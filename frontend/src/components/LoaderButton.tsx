@@ -12,7 +12,7 @@ export interface ILoaderButtonProp {
 
 export default function LoaderButton({
     isLoading,
-    className = "",
+    className = '',
     disabled = false,
     ...props
 }: ILoaderButtonProp) {

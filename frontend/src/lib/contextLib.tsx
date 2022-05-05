@@ -7,6 +7,6 @@ export type Authentication = {
 
 export const AppContext = createContext<Authentication | null>(null);
 
-export function useAppContext() {
+export function useAppContext(): Authentication | null {
   return useContext(AppContext);
 }
