@@ -46,7 +46,9 @@ export default function Signup() {
       setIsLoading(false);
       setNewUser(newUser);
     } catch (e) {
-      onError(e);
+      if (onError(e)) {
+        setNewUser(await Auth.resendSignUp(fields.email));
+      };
       setIsLoading(false);
     }
   }
