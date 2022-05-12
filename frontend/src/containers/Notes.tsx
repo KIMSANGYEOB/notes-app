@@ -1,28 +1,29 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { API, Storage } from 'aws-amplify';
-import { onError } from '../lib/errorLib';
-import Form from 'react-bootstrap/Form';
-import LoaderButton from '../components/LoaderButton';
-import config from '../config';
-import './Notes.css';
+import React, { useRef, useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { API, Storage } from "aws-amplify";
+import { onError } from "../lib/errorLib";
+import Form from "react-bootstrap/Form";
+import LoaderButton from "../components/LoaderButton";
+import config from "../config";
+import { s3Upload } from "../lib/awsLib";
+import "./Notes.css";
 
 type NoteParams = {
-    id: string;
-}
+  id: string;
+};
 
 export default function Notes() {
   const file = useRef<any>(null);
   const { id } = useParams<NoteParams>();
   const history = useHistory();
   const [note, setNote] = useState<any>(null);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     function loadNote() {
-      return API.get('notes', `/notes/${id}`, {});
+      return API.get("notes", `/notes/${id}`, {});
     }
 
     async function onLoad() {
@@ -49,14 +50,20 @@ export default function Notes() {
   }
 
   function formatFilename(str: string) {
-    return str.replace(/^\w+-/, '');
+    return str.replace(/^\w+-/, "");
   }
 
   function handleFileChange(event: any) {
     file.current = event.target.files[0];
   }
 
-  async function handleSubmit(event: any) {
+  function saveNote(note: any) {
+    return API.put("notes", `/notes/${id}`, {
+      body: note,
+    });
+  }
+
+  async function handleSubmit(event: React.MouseEvent<HTMLFormElement>) {
     let attachment;
 
     event.preventDefault();
@@ -71,20 +78,47 @@ export default function Notes() {
     }
 
     setIsLoading(true);
+
+    try {
+      if (file.current) {
+        attachment = await s3Upload(file.current);
+      }
+
+      await saveNote({
+        content,
+        attachment: attachment || note.attachment,
+      });
+      history.push("/");
+    } catch (e) {
+      onError(e);
+      setIsLoading(false);
+    }
   }
 
-  async function handleDelete(event: any) {
+  function deleteNote() {
+    return API.del("notes", `/notes/${id}`, {});
+  }
+  
+  async function handleDelete(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-
+  
     const confirmed = window.confirm(
-      'Are you sure you want to delete this note?'
+      "정말 이 메모를 삭제하시겠습니까?"
     );
-
+  
     if (!confirmed) {
       return;
     }
-
+  
     setIsDeleting(true);
+  
+    try {
+      await deleteNote();
+      history.push("/");
+    } catch (e) {
+      onError(e);
+      setIsDeleting(false);
+    }
   }
 
   return (
@@ -99,7 +133,7 @@ export default function Notes() {
             />
           </Form.Group>
           <Form.Group controlId="file">
-            <Form.Label>Attachment</Form.Label>
+            <Form.Label>첨부파일</Form.Label>
             {note.attachment && (
               <p>
                 <a
@@ -119,9 +153,9 @@ export default function Notes() {
             type="submit"
             isLoading={isLoading}
             disabled={!validateForm()}
-            className={''}
+            className={""}
           >
-            Save
+            저장
           </LoaderButton>
           <LoaderButton
             block
@@ -129,10 +163,10 @@ export default function Notes() {
             variant="danger"
             onClick={handleDelete}
             isLoading={isDeleting}
-            className={''}
+            className={""}
             disabled={false}
           >
-            Delete
+            삭제
           </LoaderButton>
         </Form>
       )}
