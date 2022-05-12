@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
 import { Auth } from "aws-amplify";
@@ -9,7 +8,6 @@ import { onError } from "../lib/errorLib";
 import "./Login.css";
 
 export default function Login() {
-  const history = useHistory();
   const { userHasAuthenticated } = useAppContext() as Authentication;
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
@@ -29,7 +27,6 @@ export default function Login() {
     try {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
-      history.push("/");
     } catch (e: unknown) {
       onError(e);
       setIsLoading(false);
