@@ -4,6 +4,7 @@ import { API, Storage } from "aws-amplify";
 import { onError } from "../lib/errorLib";
 import Form from "react-bootstrap/Form";
 import LoaderButton from "../components/LoaderButton";
+import LoaderSpinner from "../components/LoaderSpinner";
 import config from "../config";
 import { s3Upload } from "../lib/awsLib";
 import "./Notes.css";
@@ -123,7 +124,7 @@ export default function Notes() {
 
   return (
     <div className="Notes">
-      {note && (
+      {note === null ? <LoaderSpinner /> : (
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="content">
             <Form.Control

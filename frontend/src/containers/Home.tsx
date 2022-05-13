@@ -6,6 +6,7 @@ import { API } from "aws-amplify";
 import { BsPencilSquare } from "react-icons/bs";
 import { LinkContainer } from "react-router-bootstrap";
 import "./Home.css";
+import LoaderSpinner from "../components/LoaderSpinner";
 
 interface INotes {
   noteId: string
@@ -80,7 +81,7 @@ export default function Home() {
     return (
       <div className="notes">
         <h2 className="pb-3 mt-4 mb-3 border-bottom">노트 목록</h2>
-        <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+        <ListGroup>{!isLoading ? renderNotesList(notes) : <LoaderSpinner />}</ListGroup>
       </div>
     );
   }
