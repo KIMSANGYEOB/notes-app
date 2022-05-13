@@ -5,9 +5,8 @@
   "scripts": {
     "start:stage": "sst start --stage stage",
     "test": "sst test",
-    "start": "sst start",
     "build": "sst build",
-    "deploy": "sst deploy --stage stage",
+    "deploy:stage": "sst deploy --stage stage",
     "remove": "sst remove"
   },
   "eslintConfig": {
