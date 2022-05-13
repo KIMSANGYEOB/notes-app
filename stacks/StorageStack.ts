@@ -8,10 +8,8 @@ export default class StorageStack extends sst.Stack {
   constructor(scope: sst.App, id: string, props?: sst.StackProps) {
     super(scope, id, props);
 
-    // DynamoDB 테이블 생성 (두번째 의자에 본인 이니셜로 ID를 넣어주자)
     this.table = new sst.Table(this, 'notes-sykim', {
       dynamodbTable: {
-        // 여기서 tableName을 본인 이니셜을 포함해 설정한다.
         tableName: `notes-sykim`,
       },
       fields: {
@@ -24,7 +22,6 @@ export default class StorageStack extends sst.Stack {
     // S3Bucket 생성
     this.bucket = new sst.Bucket(this, 'Uploads', {
       s3Bucket: {
-        // 클라이언트에서 S3 버킷으로 접근가능하도록 CORS 설정
         cors: [
           {
             maxAge: 3000,

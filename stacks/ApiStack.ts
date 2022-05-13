@@ -9,9 +9,7 @@ export default class ApiStack extends sst.Stack {
 
     const { table } = props;
 
-    // API 생성 (두번째 인자에 본인 이니셜을 포함해 ID를 넣어주자)
     this.api = new sst.Api(this, 'api-sykim', {
-      // AWS_IAM 인증하도록 설정
       defaultAuthorizationType: ApiAuthorizationType.AWS_IAM,
       defaultFunctionProps: {
         environment: {
@@ -28,10 +26,8 @@ export default class ApiStack extends sst.Stack {
       },
     });
 
-    // API가 DynamoDB 테이블에 접근할 수 있도록 권한 설정
     this.api.attachPermissions([table]);
 
-    // API의 EndPoint Url을 노출
     this.addOutputs({
       ApiEndpoint: this.api.url,
     });

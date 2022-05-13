@@ -9,20 +9,16 @@ export default class AuthStack extends sst.Stack {
 
     const { api, bucket } = props;
 
-    // Cognito User Pool and Identity Pool 생성
     this.auth = new sst.Auth(this, 'auth-sykim', {
       cognito: {
         userPool: {
-          // Users can login with their email and password
           signInAliases: { email: true },
         },
       },
     });
 
     this.auth.attachPermissionsForAuthUsers([
-      // API 접근 허용
       api,
-      // 특정 s3 버킷의 폴더에 접근을 허용해준다.
       new iam.PolicyStatement({
         actions: ['s3:*'],
         effect: iam.Effect.ALLOW,
@@ -32,7 +28,6 @@ export default class AuthStack extends sst.Stack {
       }),
     ]);
 
-    // 생성된 ID값들을 노출시켜준다
     this.addOutputs({
       Region: scope.region,
       UserPoolId: this.auth.cognitoUserPool!.userPoolId,

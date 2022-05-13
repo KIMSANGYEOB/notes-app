@@ -6,10 +6,8 @@ export default class FrontendStack extends sst.Stack {
 
     const { api, auth, bucket } = props;
 
-    // React App 정의
     const site = new sst.ReactStaticSite(this, "ReactSite", {
       path: "frontend",
-      // 환경변수 값 전달(주요 key값들)
       environment: {
         REACT_APP_API_URL: api.url,
         REACT_APP_REGION: scope.region,
@@ -21,7 +19,6 @@ export default class FrontendStack extends sst.Stack {
       },
     });
 
-    // 사이트 주소 노출
     this.addOutputs({
       SiteUrl: site.url,
     });
