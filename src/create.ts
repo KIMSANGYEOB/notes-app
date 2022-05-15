@@ -3,10 +3,8 @@ import handler from './util/handler';
 import dynamoDb from './util/dynamodb';
 
 export const main = handler(async (event) => {
-  // JSON으로 데이터를 넘겨 'event.body' 에서 파싱이 필요하다
   const data = JSON.parse(event.body);
 
-  // DynamoDB에서 필요한 인자들
   const params = {
     TableName: process.env.TABLE_NAME!,
     Item: {
