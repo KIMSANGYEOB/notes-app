@@ -1,13 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { API, Storage } from "aws-amplify";
-import { onError } from "../lib/errorLib";
-import Form from "react-bootstrap/Form";
-import LoaderButton from "../components/LoaderButton";
-import LoaderSpinner from "../components/LoaderSpinner";
-import config from "../config";
-import { s3Upload } from "../lib/awsLib";
-import "./Notes.css";
+import React, { useRef, useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { API, Storage } from 'aws-amplify';
+import { onError } from '../lib/errorLib';
+import Form from 'react-bootstrap/Form';
+import LoaderButton from '../components/LoaderButton';
+import LoaderSpinner from '../components/LoaderSpinner';
+import config from '../config';
+import { s3Upload, s3Delete } from '../lib/awsLib';
+import './Notes.css';
 
 type NoteParams = {
   id: string;
@@ -18,13 +18,13 @@ export default function Notes() {
   const { id } = useParams<NoteParams>();
   const history = useHistory();
   const [note, setNote] = useState<any>(null);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     function loadNote() {
-      return API.get("notes", `/notes/${id}`, {});
+      return API.get('notes', `/notes/${id}`, {});
     }
 
     async function onLoad() {
@@ -51,7 +51,7 @@ export default function Notes() {
   }
 
   function formatFilename(str: string) {
-    return str.replace(/^\w+-/, "");
+    return str.replace(/^\w+-/, '');
   }
 
   function handleFileChange(event: any) {
@@ -59,7 +59,7 @@ export default function Notes() {
   }
 
   function saveNote(note: any) {
-    return API.put("notes", `/notes/${id}`, {
+    return API.put('notes', `/notes/${id}`, {
       body: note,
     });
   }
@@ -77,11 +77,11 @@ export default function Notes() {
       );
       return;
     }
-
     setIsLoading(true);
 
     try {
       if (file.current) {
+        await s3Delete(note.attachment);
         attachment = await s3Upload(file.current);
       }
 
@@ -89,7 +89,7 @@ export default function Notes() {
         content,
         attachment: attachment || note.attachment,
       });
-      history.push("/");
+      history.push('/');
     } catch (e) {
       onError(e);
       setIsLoading(false);
@@ -97,25 +97,24 @@ export default function Notes() {
   }
 
   function deleteNote() {
-    return API.del("notes", `/notes/${id}`, {});
+    return API.del('notes', `/notes/${id}`, {});
   }
-  
+
   async function handleDelete(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-  
-    const confirmed = window.confirm(
-      "정말 이 메모를 삭제하시겠습니까?"
-    );
-  
+
+    const confirmed = window.confirm('정말 이 메모를 삭제하시겠습니까?');
+
     if (!confirmed) {
       return;
     }
-  
+
     setIsDeleting(true);
-  
+
     try {
+      await s3Delete(note.attachment);
       await deleteNote();
-      history.push("/");
+      history.push('/');
     } catch (e) {
       onError(e);
       setIsDeleting(false);
@@ -124,7 +123,9 @@ export default function Notes() {
 
   return (
     <div className="Notes">
-      {note === null ? <LoaderSpinner /> : (
+      {note === null ? (
+        <LoaderSpinner />
+      ) : (
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="content">
             <Form.Control
@@ -154,7 +155,7 @@ export default function Notes() {
             type="submit"
             isLoading={isLoading}
             disabled={!validateForm()}
-            className={""}
+            className={''}
           >
             저장
           </LoaderButton>
@@ -164,7 +165,7 @@ export default function Notes() {
             variant="danger"
             onClick={handleDelete}
             isLoading={isDeleting}
-            className={""}
+            className={''}
             disabled={false}
           >
             삭제
