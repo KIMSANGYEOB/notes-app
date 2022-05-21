@@ -71,9 +71,9 @@ export default function Notes() {
 
     if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
       alert(
-        `Please pick a file smaller than ${
+        `파일은 ${
           config.MAX_ATTACHMENT_SIZE / 1000000
-        } MB.`
+        } MB 보다 작아야 합니다.`
       );
       return;
     }
