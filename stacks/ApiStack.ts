@@ -18,11 +18,11 @@ export default class ApiStack extends sst.Stack {
       },
       cors: true,
       routes: {
-        'POST /notes': 'src/create.main', // 메모 생성 API
-        'GET /notes/{id}': 'src/get.main', // 메모 조회 API
-        'GET /notes': 'src/list.main', // 메모 목록 조회 API
-        'PUT /notes/{id}': 'src/update.main', // 메모 수정 API
-        'DELETE /notes/{id}': 'src/delete.main', // 메모 삭제 API
+        'POST /notes': 'src/create.main',
+        'GET /notes/{id}': 'src/get.main',
+        'GET /notes': 'src/list.main',
+        'PUT /notes/{id}': 'src/update.main',
+        'DELETE /notes/{id}': 'src/delete.main',
       },
     });
 
